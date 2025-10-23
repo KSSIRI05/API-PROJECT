@@ -1,6 +1,6 @@
 from datetime import datetime
 from beanie import Document
-class task(Document):
+class Task(Document):
     title: str
     description: str
     priority: int
