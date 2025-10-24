@@ -50,6 +50,7 @@ async def update_task(id: str ,data : UpdateTask):
     try:
         for field, value in data.dict().items():
             setattr(task, field, value)
+            await task.save()
         return task
     except Exception as e:
         raise HTTPException(
@@ -68,6 +69,7 @@ async def patch_task(id: str ,data : UpdateTask):
     try :  
         for field, value in data.dict().items():
             setattr(task, field, value)
+            await task.save()
         return task
     except Exception as e:
         raise HTTPException(
@@ -84,7 +86,7 @@ async def delete_task(id):
             detail=f"tache avec l'{id} non trouvee"
         )
     try :
-        await task.delete
+        await task.delete()
         return  "suprrime"
     except Exception as e:
         raise HTTPException(
