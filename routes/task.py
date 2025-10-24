@@ -1,9 +1,13 @@
 from fastapi import APIRouter
-from models import Task
-from schema import CreateTask,UpdateTask 
+from APIproject.models.task import Task
+from APIproject.schema.task import CreateTask,UpdateTask 
 
 router= APIRouter()
 
+@router.get("/api/v1/task/{id}")
+async def get_task(id):
+    task = await Task.get(id)
+    return  task
 
 @router.get("/api/v1/tasks")
 async def get_alltasks():
