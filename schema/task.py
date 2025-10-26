@@ -10,8 +10,8 @@ class CreateTask(BaseModel):
     status:bool
 
 class UpdateTask(BaseModel):
-    title: Optional[str]
-    description: Optional[str]
-    priority: Optional[int]
-    due_date: Optional[datetime]
-    status:Optional[bool]    
+    title: Optional[str] = None
+    description: Optional[str] = None
+    priority: Optional[int] = None
+    due_date: Optional[datetime] = None
+    status: Optional[bool] = None

@@ -67,9 +67,11 @@ async def patch_task(id: str ,data : UpdateTask):
             detail=f"tache avec l'{id} non trouvee"
         )
     try :  
-        for field, value in data.dict().items():
+        # Only update fields that were explicitly set in the request
+        update_data = data.dict(exclude_unset=True)
+        for field, value in update_data.items():
             setattr(task, field, value)
-            await task.save()
+        await task.save()
         return task
     except Exception as e:
         raise HTTPException(
