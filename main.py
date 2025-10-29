@@ -12,6 +12,6 @@ async def start_db():
 def read_root():
     return {"etat": "bon"}
 
-app.include_router(task_router, prefix="/api/v1")
+app.include_router(task_router)
 
 
