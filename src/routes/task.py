@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from models.task import Task
-from schema.task import CreateTask,UpdateTask 
+from src.models.task import Task
+from src.schema.task import CreateTask,UpdateTask 
 
 router= APIRouter()
 

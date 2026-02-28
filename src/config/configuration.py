@@ -1,7 +1,7 @@
 # config/database.py
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
-from models.task import Task  # modèle à enregistrer dans Beanie
+from src.models.task import Task  # modèle à enregistrer dans Beanie
 import os
 
 from dotenv import load_dotenv

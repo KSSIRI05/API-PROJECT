@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from routes.task import router as task_router
-from config.configuration import init_db
+from src.routes.task import router as task_router
+from src.config.configuration import init_db
 
 app = FastAPI()
 
