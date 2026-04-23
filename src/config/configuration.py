@@ -6,12 +6,22 @@ import os
 
 from dotenv import load_dotenv
 load_dotenv()
-MONGO_URI = os.getenv("MONGO_URI")
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
 
 async def init_db():
-    client = AsyncIOMotorClient(MONGO_URI,serverSelectionTimeoutMS=60000)  # 60 secondes au lieu de 30
+    client = AsyncIOMotorClient(MONGO_URI, serverSelectionTimeoutMS=60000)  # 60 secondes au lieu de 30
     # on sélectionne la base de données
     database = client["API-DATA"]
     
     # initialisation de Beanie avec la base et les modèles
     await init_beanie(database=database, document_models=[Task])
+
+async def check_db_connection():
+    client = AsyncIOMotorClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+    try:
+        await client.admin.command("ping")
+        return True
+    except Exception:
+        return False
+    finally:
+        client.close()

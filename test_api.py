@@ -10,7 +10,7 @@ def client():
 def test_health(client):
     response = client.get("/health")
     assert response.status_code == 200
-    assert response.json() == {"etat": "bon"}
+    assert response.json() == {"etat": "bon", "mongodb": "connecté"}
 
 def test_get_alltasks(client):
     res = client.get("/api/v1/tasks")
