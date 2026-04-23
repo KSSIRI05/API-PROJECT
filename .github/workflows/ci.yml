@@ -9,17 +9,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
-    services:
-      mongodb:
-        image: mongo:latest
-        options: >-
-          --health-cmd mongosh
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 27017:27017
 
     steps:
     - uses: actions/checkout@v3
@@ -46,7 +35,7 @@ jobs:
     
     - name: Run tests with pytest
       env:
-        MONGODB_URL: mongodb://localhost:27017
+        MONGO_URI: ${{ secrets.MONGODB_ATLAS_URI }}
       run: |
         pytest test_api.py -v --tb=short
 
