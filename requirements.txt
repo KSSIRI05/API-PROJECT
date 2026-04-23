@@ -1,7 +1,9 @@
 fastapi
 uvicorn[standard]
 pydantic
-beanie
-motor
+beanie==1.26.0
+motor==3.3.2
 pytest
 httpx
+pytest-asyncio
+python-dotenv
