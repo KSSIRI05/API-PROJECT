@@ -1,121 +1,55 @@
-# API de Gestion des Tâches
+# Task Management API
 
-Une API RESTful pour la gestion des tâches, construite avec **FastAPI** et **MongoDB**.
+API REST asynchrone de gestion de tâches, construite avec FastAPI, Beanie et MongoDB. Les tâches incluent titre, description, priorité, échéance et statut.
 
-## 🛠️ Technologies
+## Aperçu
+![Documentation interactive de l'API](docs/screenshots/api.png)
+Capture de Swagger UI générée depuis les routes du projet ; elle illustre la documentation, sans valider les opérations MongoDB.
 
-- **FastAPI** - Framework web Python moderne
-- **MongoDB** - Base de données NoSQL (via Beanie ODM)
-- **Docker** - Conteneurisation
-- **Pytest** - Tests unitaires
+## Fonctionnalités implémentées
+| Méthode | Route | Fonction |
+|---|---|---|
+| GET | `/health` | Vérifier la connexion MongoDB |
+| GET | `/api/v1/tasks` | Lister les tâches |
+| GET | `/api/v1/task/{id}` | Consulter une tâche |
+| POST | `/api/v1/tasks` | Créer une tâche |
+| PUT | `/api/v1/task/{id}` | Mettre à jour une tâche |
+| PATCH | `/api/v1/task/{id}` | Modifier les champs fournis |
+| DELETE | `/api/v1/task/{id}` | Supprimer une tâche |
 
-## 📋 Fonctionnalités
-
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/api/v1/tasks` | Liste toutes les tâches |
-| GET | `/api/v1/task/{id}` | Récupère une tâche par ID |
-| POST | `/api/v1/tasks` | Crée une nouvelle tâche |
-| PUT | `/api/v1/task/{id}` | Met à jour une tâche (complet) |
-| PATCH | `/api/v1/task/{id}` | Met à jour une tâche (partiel) |
-| DELETE | `/api/v1/task/{id}` | Supprime une tâche |
-
-## 🚀 Installation locale
-
-### Prérequis
-
-- Python 3.13+
-- MongoDB (local ou cloud)
-
-### Configuration
-
-1. **Cloner le projet**
+## Installation
+Prérequis : Python 3.11+ et MongoDB accessible, local ou Atlas.
 ```bash
-git clone <repo-url>
-cd APIproject
-```
-
-2. **Créer un environnement virtuel**
-```bash
-python -m venv venv
-# Windows
-venv\Scripts\activate
-# Linux/Mac
-source venv/bin/activate
-```
-
-3. **Installer les dépendances**
-```bash
+git clone https://github.com/KSSIRI05/API-PROJECT.git
+cd API-PROJECT
+python -m venv .venv
+# Windows : .venv\Scripts\activate
+# Linux/macOS : source .venv/bin/activate
 pip install -r requirements.txt
 ```
-
-4. **Configurer les variables d'environnement**
-
-Créer un fichier `.env` à la racine :
+Créer `.env` à la racine :
 ```env
 MONGO_URI=mongodb://localhost:27017
 ```
-
-5. **Lancer le serveur**
+L'application utilise la base `API-DATA` et initialise Beanie au démarrage.
 ```bash
 uvicorn src.main:app --reload
 ```
+Swagger : http://localhost:8000/docs ; ReDoc : http://localhost:8000/redoc.
 
-L'API sera disponible sur `http://localhost:8000`
-
-## 🐳 Docker
-
-### Construire et exécuter
-
+## Docker
 ```bash
 docker build -t api-tasks .
-docker run -p 8080:8080 api-tasks
+docker run --env-file .env -p 8080:8080 api-tasks
 ```
+Dans un conteneur, `localhost` désigne le conteneur. Pour MongoDB sur l'hôte avec Docker Desktop, utiliser `mongodb://host.docker.internal:27017` dans un fichier d'environnement dédié ; pour Atlas, utiliser son URI. Swagger est alors accessible sur http://localhost:8080/docs. Aucun fichier Docker Compose n'est fourni.
 
-### Avec Docker Compose
-
+## Tests et CI
 ```bash
-docker compose up --build
+pytest test_api.py -v
 ```
+Les tests accèdent à MongoDB et créent des données : utiliser une instance de test séparée. GitHub Actions lance Pytest et construit une image Docker sans la publier (`push: false`). Le secret `MONGODB_ATLAS_URI` doit être configuré. Aucun déploiement automatique n'est prévu.
 
-## 📖 Documentation API
-
-Une fois le serveur lancé :
-- **Swagger UI** : http://localhost:8000/docs
-- **ReDoc** : http://localhost:8000/redoc
-
-## ✅ Tests
-
-```bash
-pytest
-```
-
-## 📁 Structure du projet
-
-```
-APIproject/
-├── src/
-│   ├── main.py              # Point d'entrée FastAPI
-│   ├── config/
-│   │   └── configuration.py # Configuration MongoDB
-│   ├── models/
-│   │   └── task.py          # Modèle Beanie
-│   ├── routes/
-│   │   └── task.py          # Endpoints API
-│   └── schema/
-│       └── task.py          # Schémas Pydantic
-├── test_api.py              # Tests pytest
-├── Dockerfile
-├── requirements.txt
-└── README.md
-```
-
-## 🔧 Variables d'environnement
-
-| Variable | Description | Défaut |
-|----------|-------------|--------|
-| `MONGO_URI` | URI de connexion MongoDB | `mongodb://localhost:27017` |
-
-## 📝 Licence
-
-MIT
+## Organisation et limites
+`src/routes/` : endpoints ; `src/models/` : documents Beanie ; `src/schema/` : validation ; `src/config/` : connexion MongoDB.
+Le projet ne contient pas d'authentification ni de gestion multi-utilisateur. Une liste vide retourne actuellement HTTP 404.
